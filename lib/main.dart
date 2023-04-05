@@ -7,6 +7,25 @@ main() => runApp(PerguntaApp());
 class PerguntasAppState extends State<PerguntaApp> {
   var _perguntaSelecionada = 0;
 
+  final _perguntas = const [
+    {
+      'texto': 'Qual é sua cor favorita?',
+      'respostas': ['Preto', 'Vermelho', 'Verde', 'branco']
+    },
+    {
+      'texto': 'Qual é seu animal favorito?',
+      'respostas': ['Coelho', 'Cobra', 'Elefante', 'Leão']
+    },
+    {
+      'texto': 'Qual é seu instrutor favorito?',
+      'respostas': ['Maria', 'João', 'Leo', 'Pedro']
+    },
+  ];
+
+  bool get temPerguntaSelecionada {
+    return _perguntaSelecionada < _perguntas.length;
+  }
+
   void _responder() {
     setState(() {
       _perguntaSelecionada++;
@@ -15,22 +34,10 @@ class PerguntasAppState extends State<PerguntaApp> {
 
   @override
   Widget build(BuildContext context) {
-    final perguntas = [
-      {
-        'texto': 'Qual é sua cor favorita?',
-        'respostas': ['Preto', 'Vermelho', 'Verde', 'branco']
-      },
-      {
-        'texto': 'Qual é seu animal favorito?',
-        'respostas': ['Coelho', 'Cobra', 'Elefante', 'Leão']
-      },
-      {
-        'texto': 'Qual é seu instrutor favorito?',
-        'respostas': ['Maria', 'João', 'Leo', 'Pedro']
-      },
-    ];
-    List<String> respostas =
-        perguntas[_perguntaSelecionada].cast()['respostas'];
+    List<String> respostas = temPerguntaSelecionada
+        ? _perguntas[_perguntaSelecionada].cast()['respostas']
+        : [];
+
     List<Widget> widgets =
         respostas.map((t) => Resposta(t, _responder)).toList();
 
@@ -39,12 +46,14 @@ class PerguntasAppState extends State<PerguntaApp> {
         appBar: AppBar(
           title: const Text('Perguntas'),
         ),
-        body: Column(
-          children: <Widget>[
-            Questao(perguntas[_perguntaSelecionada]['texto'].toString()),
-            ...widgets
-          ],
-        ),
+        body: temPerguntaSelecionada
+            ? Column(
+                children: <Widget>[
+                  Questao(_perguntas[_perguntaSelecionada]['texto'].toString()),
+                  ...widgets
+                ],
+              )
+            : null,
       ),
     );
   }
