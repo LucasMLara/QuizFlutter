@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class Resultado extends StatelessWidget {
   final int pontuacao;
+  final void Function() qndReiniciarQuestionario;
 
-  const Resultado(this.pontuacao);
+  const Resultado(this.pontuacao, this.qndReiniciarQuestionario);
   String get fraseResultado {
     if (pontuacao < 8) {
       return 'Parabéns';
@@ -20,10 +22,22 @@ class Resultado extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Text(
-      fraseResultado,
-      style: TextStyle(fontSize: 28),
-    ));
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+            child: Text(
+          fraseResultado,
+          style: TextStyle(fontSize: 28),
+        )),
+        TextButton(
+          child: Text(
+            'Reiniciar?',
+            style: TextStyle(fontSize: 18),
+          ),
+          onPressed: qndReiniciarQuestionario,
+        )
+      ],
+    );
   }
 }
